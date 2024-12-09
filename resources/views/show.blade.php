@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -11,27 +11,21 @@
 </head>
 
 <body>
-    <h1>Ajout d'un billet de blog</h1>
+    <h1>{{ $post->title }}</h1>
 
-    @session('success')
-        <p>{{ $value }}</p>
-    @endsession
+    <p>{{ $post->content }}</p>
+
+    <span>Créé par {{ $post->author }}</span>
+
+    <a href="{{ route('blog.edit', [
+        'id' => $post->id,
+    ]) }}">
+        Modifier
+    </a>
 
     <a href="{{ route('home') }}">
         Accueil
     </a>
-
-    <form action="{{ route('blog.submit') }}"
-          method="POST">
-        @csrf
-
-        @include('elements.form')
-
-        <button type="submit">
-            Envoyer
-        </button>
-
-    </form>
 
 </body>
 

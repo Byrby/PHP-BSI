@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <h1>Ajout d'un billet de blog</h1>
+    <h1>Modification d'un billet de blog</h1>
 
     @session('success')
         <p>{{ $value }}</p>
@@ -21,14 +21,18 @@
         Accueil
     </a>
 
-    <form action="{{ route('blog.submit') }}"
+    <form action="{{ route('blog.update', [
+        'id' => $post->id,
+    ]) }}"
           method="POST">
         @csrf
 
-        @include('elements.form')
+        @include('elements.form', [
+            'post' => $post,
+        ])
 
         <button type="submit">
-            Envoyer
+            Modifer
         </button>
 
     </form>

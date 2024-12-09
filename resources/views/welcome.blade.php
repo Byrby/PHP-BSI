@@ -12,6 +12,22 @@
 
 <body>
     <h1>Blog</h1>
+
+    <a href="{{ route('blog.create') }}">
+        Ajouter un article
+    </a>
+
+    @foreach ($postsList as $currentPost)
+        <div>
+            <a href="{{ route('blog.show', [
+                'id' => $currentPost->id,
+            ]) }}">
+                {{ $currentPost->title }}
+            </a>
+            {{ $currentPost->resume }}
+        </div>
+    @endforeach
+
 </body>
 
 </html>
