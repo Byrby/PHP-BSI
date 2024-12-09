@@ -1,15 +1,10 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    //récupération des billets de blog
-    $posts = Post::all();
-    return view('welcome', [
-        "postsList" => $posts
-    ]);
-})->name("home");
+Route::get('/', [BlogController::class, "index"])->name("home");
 
 
 // Route for blogs

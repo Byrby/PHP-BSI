@@ -13,9 +13,14 @@
 <body>
     <h1>Blog</h1>
 
+    @session('message')
+        {{ $value }}
+    @endsession
+
     <a href="{{ route('blog.create') }}">
         Ajouter un article
     </a>
+
 
     @foreach ($postsList as $currentPost)
         <div>

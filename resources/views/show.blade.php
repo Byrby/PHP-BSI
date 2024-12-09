@@ -29,13 +29,11 @@
     ]) }}"
           method="POST">
         @csrf
-        <button>
+        <button class=""
+                onclick="return confirm('Êtes vous certain de vouloir supprimer le billet ?')">
             Supprimer
         </button>
-
     </form>
-
-
 
     <a href="{{ route('home') }}">
         Accueil
