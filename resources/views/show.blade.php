@@ -23,6 +23,20 @@
         Modifier
     </a>
 
+
+    <form action="{{ route('blog.delete', [
+        'id' => $post->id,
+    ]) }}"
+          method="POST">
+        @csrf
+        <button>
+            Supprimer
+        </button>
+
+    </form>
+
+
+
     <a href="{{ route('home') }}">
         Accueil
     </a>

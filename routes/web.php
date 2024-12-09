@@ -76,8 +76,19 @@ Route::group([
         //On sauvegarde dans la DB
         $post->save();
         //On redirige vers la page du billet de blog
-        return redirect()->to(route("blog.show", [
-            "id" => $post->id
-        ]));
+        return redirect()->to(
+            route("blog.show", [
+                "id" => $post->id
+            ])
+        );
     })->name("update");
+
+    Route::post('/{id}/delete', function ($id) {
+        $postToDelete = Post::find($id);
+        $postToDelete->delete();
+
+        return redirect()
+            ->to(route("home"))
+            ->withMessage("Le billet de blog a été supprimé.");
+    })->name("delete");
 });
