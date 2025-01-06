@@ -1,89 +1,34 @@
 <?php
 
 use App\Http\Controllers\BlogController;
-use App\Models\Post;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BlogController::class, "index"])->name("home");
 
-
-// Route for blogs
 Route::group([
     "as" => "blog.",
-    "prefix" => "/blog"
+    "prefix" => "/blog",
 ], function () {
+    Route::get("/nouveau-billet", [BlogController::class, "create"])->name("create");
 
-    //Get blog post creation form
-    Route::get("/nouveau-billet", function () {
-        return view("dossier.test");
-    })->name("create");
-
-    //Get blog post creation form
-    Route::post("/submit", function () {
-
-        //Permet de valider les données du formulaire
-        $data = request()->validate([
-            "title" => "required|max:100",
-            "author" => "required",
-            "resume" => "required",
-            "content" => "required",
-        ]);
-
-        $post = new Post();
-        $post->fill($data);
-        $post->save();
-
-        return redirect()
-            ->to(route("blog.create"))
-            ->withSuccess("C'est super");
-    })->name("submit");
-
-    Route::get("/{id}", function ($id) {
-        //Some code
-        $post = Post::find($id);
-
-        return view("show", [
-            "post" => $post
-        ]);
-    })->name("show");
-
-
-    Route::get("/{id}/edit", function ($id) {
-        $post = Post::find($id);
-
-        return view("edit", [
-            "post" => $post
-        ]);
-    })->name("edit");
-
-    Route::post('/{id}/update', function ($id) {
-        //Permet de valider les données du formulaire
-        $data = request()->validate([
-            "title" => "required|max:100",
-            "author" => "required",
-            "resume" => "required",
-            "content" => "required",
-        ]);
-        //On récupère le post en question
-        $post = Post::find($id);
-        //On change ses valeurs
-        $post->fill($data);
-        //On sauvegarde dans la DB
-        $post->save();
-        //On redirige vers la page du billet de blog
-        return redirect()->to(
-            route("blog.show", [
-                "id" => $post->id
-            ])
-        );
-    })->name("update");
-
-    Route::post('/{id}/delete', function ($id) {
-        $postToDelete = Post::find($id);
-        $postToDelete->delete();
-
-        return redirect()
-            ->to(route("home"))
-            ->withMessage("Le billet de blog a été supprimé.");
-    })->name("delete");
+    Route::get("/nouveau-billet", [BlogController::class, "create"])->name("create");
+    Route::get("/submit", [BlogController::class, "submit"])->name("submit");
+    Route::get("/{id}", [BlogController::class, "show"])->name("show");
+    Route::get("/{id}/edit", [BlogController::class, "edit"])->name("edit");
+    Route::get("/{id}/update", [BlogController::class, "update"])->name("update");
+    Route::get("/{id}/delete", [BlogController::class, "delete"])->name("delete");
 });
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';
